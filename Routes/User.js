@@ -12,6 +12,7 @@ router.post('/signup',async(req,res)=>{
         var hash = await bcrypt.hash(req.body.password,10)
         // console.log(hash);
         req.body.password = hash;
+        req.body.admin = 0;
         const user = db.collection("users").insertOne(req.body);
         await closeConnection();
         res.send("added")
@@ -26,13 +27,15 @@ router.post('/signin',async(req,res)=>{
         const db = await DBconnect();
          
         const user =await db.collection("users").findOne({email:req.body.email});
-        // console.log(user);
+        const {password ,confirmpassword,...others} = user
+        console.log(user);
+        console.log(others);
         if(user){
             const compare = await bcrypt.compare(req.body.password,user.password);
             // console.log(compare);
             if(compare){
                 const token = await jwt.sign({_id:user._id},JWT_secret,{expiresIn:"24h"})
-                res.status(200).send({message:"success",token})
+                res.status(200).send({message:"success",others,token})
             }else{
                 res.status(404).send("Incorrrect password / email")
             }
