@@ -42,6 +42,7 @@ router.get('/product/:id',verifyToken,async(req,res)=>{
 router.put('/updateproduct/:id',verifyToken,async(req,res)=>{
     try {
         const db = await DBconnect();
+        
         const product =await db.collection("products").updateOne({_id:mongodb.ObjectId(req.params.id)},{$set:req.body});
         await closeConnection();
         res.send(product)
@@ -64,10 +65,23 @@ router.delete('/deleteproduct/:id',verifyToken,async(req,res)=>{
 
 router.post('/wishlist',verifyToken,async(req,res)=>{
     try {
+        
         const db = await DBconnect();
         const product =await db.collection("wishlist").insertOne(req.body);
         await closeConnection();
         res.send("added")
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.get('/wishlist/:id',verifyToken,async(req,res)=>{
+    try {
+        // console.log(req.user);
+        const db = await DBconnect();
+        const product =await db.collection("wishlist").find({userId:req.params.id}).toArray();
+        await closeConnection();
+        res.send(product);
     } catch (error) {
         console.log(error)
     }

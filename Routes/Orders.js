@@ -15,6 +15,17 @@ router.post('/addcart',verifyToken,async(req,res)=>{
     }
 })
 
+router.get('/cart/:id',verifyToken,async(req,res)=>{
+    try {
+        const db = await DBconnect();
+        const product =await db.collection("cartitem").find({userId:req.params.id}).toArray();
+        await closeConnection();
+        res.send(product);
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 
 router.delete('/deletecart/:id',verifyToken,async(req,res)=>{
     try {

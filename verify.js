@@ -20,7 +20,8 @@ const verifyToken = async(req,res,next)=>{
 
 const verifyPutToken = async(req,res,next)=>{
     try {
-        let token = req.body.headers.authorization;
+        // console.log(req.body)
+        let token = req.body.headers.Authorization;
         const decodedToken = await jwt.verify(token,JWT_secret,(err,user)=>{
             if(err){
                 res.status(401).send("Unauthorised");

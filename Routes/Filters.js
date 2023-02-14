@@ -31,7 +31,7 @@ router.get('/filter/categories/:category',verifyToken,async(req,res)=>{
 router.get('/filter/genderprice/:clothing',verifyToken,async(req,res)=>{
     try {
         const db = await DBconnect();
-        const products =await  db.collection("products").find({clothing:req.params.clothing,price:{$lt:2000}}).toArray();
+        const products =await  db.collection("products").find({clothing:req.params.clothing,price:{$lt:1000}}).toArray();
         await closeConnection();
         res.send(products)
     } catch (error) {
