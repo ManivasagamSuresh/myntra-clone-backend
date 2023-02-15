@@ -29,9 +29,11 @@ router.get('/products',verifyToken,async(req,res)=>{
 
 router.get('/product/:id',verifyToken,async(req,res)=>{
     try {
+        // console.log(req.params.id)
         const db = await DBconnect();
         const product =await db.collection("products").findOne({_id: mongodb.ObjectId(req.params.id)});
         await closeConnection();
+        // console.log(product);
         res.send(product)
     } catch (error) {
         console.log(error)
@@ -74,6 +76,19 @@ router.post('/wishlist',verifyToken,async(req,res)=>{
         console.log(error)
     }
 })
+
+router.get('/searchproducts/:brand',verifyToken,async(req,res)=>{
+    try {
+        // console.log(req.user);
+        const db = await DBconnect();
+        const product =await db.collection("products").find({brand:{$regex:req.params.brand,$options:"i"}}).limit(30).toArray();
+        await closeConnection();
+        res.send(product);
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 
 router.get('/wishlist/:id',verifyToken,async(req,res)=>{
     try {

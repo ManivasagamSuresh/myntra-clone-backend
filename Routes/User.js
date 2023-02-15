@@ -30,8 +30,8 @@ router.post('/signin',async(req,res)=>{
          
         const user =await db.collection("users").findOne({email:req.body.email});
         const {password ,confirmpassword,...others} = user
-        console.log(user);
-        console.log(others);
+        // console.log(user);
+        // console.log(others);
         if(user){
             const compare = await bcrypt.compare(req.body.password,user.password);
             // console.log(compare);
@@ -93,7 +93,7 @@ router.put('/cartIdRemove/:id',verifyToken,async(req,res)=>{
         const db = await DBconnect();
         const user =await db.collection("users").updateOne({_id:mongodb.ObjectId(req.params.id)},{$pull:{cart:mongodb.ObjectId(req.body.pId)}});
         await closeConnection();
-        res.send("updated");
+        res.send(user);
     } catch (error) {
         console.log(error)
     }
