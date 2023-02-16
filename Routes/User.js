@@ -122,5 +122,17 @@ router.put('/wishIdRemove/:id',verifyToken,async(req,res)=>{
     }
 })
 
+router.put('/emptycart/:id',async(req,res)=>{
+    try {
+        
+        const db = await DBconnect();
+        const user = await db.collection("users").updateOne({_id:mongodb.ObjectId(req.params.id)},{$set:{cart:[]}},{multi:true});
+        await closeConnection();
+        res.send(user);
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 
 module.exports = router
