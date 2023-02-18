@@ -77,11 +77,12 @@ router.post('/wishlist',verifyToken,async(req,res)=>{
     }
 })
 
-router.get('/searchproducts/:brand',verifyToken,async(req,res)=>{
+router.get('/searchproducts',verifyToken,async(req,res)=>{
     try {
         // console.log(req.user);
+        const {q} = req.query
         const db = await DBconnect();
-        const product =await db.collection("products").find({brand:{$regex:req.params.brand,$options:"i"}}).limit(30).toArray();
+        const product =await db.collection("products").find({brand:{$regex:q,$options:"i"}}).limit(30).toArray();
         await closeConnection();
         res.send(product);
     } catch (error) {
