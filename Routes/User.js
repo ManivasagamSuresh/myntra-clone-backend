@@ -14,6 +14,9 @@ router.post('/signup',async(req,res)=>{
         // console.log(hash);
         req.body.password = hash;
         req.body.admin = 0;
+        req.body.cart = [];
+        req.body.wishlist = [];
+        req.body.totalprice = [];
         const user = db.collection("users").insertOne(req.body);
         await closeConnection();
         res.send("added")
